@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/barang.dart';
-import '../services/api_service.dart';
+import '../services/supabase_service.dart';
 
 class AddEditScreen extends StatefulWidget {
   final Barang? barang;
@@ -46,9 +46,9 @@ class _AddEditScreenState extends State<AddEditScreen> {
       );
 
       if (widget.barang == null) {
-        await ApiService.tambahBarang(barang);
+        await SupabaseService.tambahBarang(barang);
       } else {
-        await ApiService.updateBarang(barang);
+        await SupabaseService.updateBarang(barang);
       }
 
       Navigator.pop(context);

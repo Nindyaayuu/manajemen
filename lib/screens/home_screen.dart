@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/barang.dart';
-import '../services/api_service.dart';
+import '../services/supabase_service.dart';
 import 'add_edit_screen.dart';
 import '../widgets/barang_tile.dart';
 
@@ -22,12 +22,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _loadBarang() {
     setState(() {
-      _barangList = ApiService.fetchBarang();
+      _barangList = SupabaseService.fetchBarang();
     });
   }
 
   void _deleteBarang(int id) async {
-    await ApiService.hapusBarang(id);
+    await SupabaseService.hapusBarang(id);
     _loadBarang();
   }
 
