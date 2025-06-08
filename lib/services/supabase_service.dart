@@ -5,53 +5,49 @@ class SupabaseService {
   static final SupabaseClient client = Supabase.instance.client;
   static const String tableName = 'barang';
 
+  // Ambil semua data barang
   static Future<List<Barang>> fetchBarang() async {
-    final response = await client.from(tableName).select().execute();
-
-    if (response.status != 200) {
-      throw Exception('Failed to fetch barang: ${response.status}');
-    }
-
-    final data = response.data as List<dynamic>;
-    return data.map((e) => Barang.fromJson(e as Map<String, dynamic>)).toList();
+    final data = await client.from(tableName).select();
+    return (data as List<dynamic>)
+        .map((e) => Barang.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
+  // Tambah barang baru
   static Future<void> tambahBarang(Barang barang) async {
-    final response =
-        await client.from(tableName).insert({
+    final response = await client.from(tableName).insert({
+      'nama': barang.nama,
+      'stok': barang.stok,
+      'deskripsi': barang.deskripsi,
+    });
+
+    if (response == null) {
+      throw Exception('Gagal menambahkan barang');
+    }
+  }
+
+  // Update barang berdasarkan id
+  static Future<void> updateBarang(Barang barang) async {
+    final response = await client
+        .from(tableName)
+        .update({
           'nama': barang.nama,
           'stok': barang.stok,
           'deskripsi': barang.deskripsi,
-        }).execute();
+        })
+        .eq('id', barang.id);
 
-    if (response.status != 201 && response.status != 200) {
-      throw Exception('Failed to add barang: ${response.status}');
+    if (response == null) {
+      throw Exception('Gagal mengupdate barang');
     }
   }
 
-  static Future<void> updateBarang(Barang barang) async {
-    final response =
-        await client
-            .from(tableName)
-            .update({
-              'nama': barang.nama,
-              'stok': barang.stok,
-              'deskripsi': barang.deskripsi,
-            })
-            .eq('id', barang.id)
-            .execute();
-
-    if (response.status != 200) {
-      throw Exception('Failed to update barang: ${response.status}');
-    }
-  }
-
+  // Hapus barang berdasarkan id
   static Future<void> hapusBarang(int id) async {
-    final response =
-        await client.from(tableName).delete().eq('id', id).execute();
+    final response = await client.from(tableName).delete().eq('id', id);
 
-    if (response.status != 200) {
-      throw Exception('Failed to delete barang: ${response.status}');
+    if (response == null) {
+      throw Exception('Gagal menghapus barang');
     }
   }
 }

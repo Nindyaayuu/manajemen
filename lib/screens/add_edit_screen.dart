@@ -12,31 +12,20 @@ class AddEditScreen extends StatefulWidget {
 
 class _AddEditScreenState extends State<AddEditScreen> {
   final _formKey = GlobalKey<FormState>();
-  late TextEditingController _namaController;
-  late TextEditingController _stokController;
-  late TextEditingController _deskripsiController;
-
+  final _namaController = TextEditingController();
+  final _stokController = TextEditingController();
+  final _deskripsiController = TextEditingController();
   @override
   void initState() {
     super.initState();
-    _namaController = TextEditingController(text: widget.barang?.nama ?? '');
-    _stokController = TextEditingController(
-      text: widget.barang?.stok.toString() ?? '',
-    );
-    _deskripsiController = TextEditingController(
-      text: widget.barang?.deskripsi ?? '',
-    );
+    if (widget.barang != null) {
+      _namaController.text = widget.barang!.nama;
+      _stokController.text = widget.barang!.stok.toString();
+      _deskripsiController.text = widget.barang!.deskripsi ?? '';
+    }
   }
 
-  @override
-  void dispose() {
-    _namaController.dispose();
-    _stokController.dispose();
-    _deskripsiController.dispose();
-    super.dispose();
-  }
-
-  void _simpanData() async {
+  Future<void> _simpan() async {
     if (_formKey.currentState!.validate()) {
       final barang = Barang(
         id: widget.barang?.id ?? 0,
@@ -45,13 +34,20 @@ class _AddEditScreenState extends State<AddEditScreen> {
         deskripsi: _deskripsiController.text,
       );
 
-      if (widget.barang == null) {
-        await SupabaseService.tambahBarang(barang);
-      } else {
-        await SupabaseService.updateBarang(barang);
-      }
+      try {
+        if (widget.barang == null) {
+          await SupabaseService.tambahBarang(barang);
+        } else {
+          await SupabaseService.updateBarang(barang);
+        }
 
-      Navigator.pop(context);
+        if (!mounted) return;
+        Navigator.pop(context);
+      } catch (e) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Gagal simpan: $e')));
+      }
     }
   }
 
@@ -89,7 +85,7 @@ class _AddEditScreenState extends State<AddEditScreen> {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: _simpanData,
+                onPressed: _simpan,
                 child: Text(isEditing ? 'Simpan Perubahan' : 'Tambah Barang'),
               ),
             ],

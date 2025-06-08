@@ -2,7 +2,7 @@ class Barang {
   final int id;
   final String nama;
   final int stok;
-  final String deskripsi;
+  final String? deskripsi;
 
   Barang({
     required this.id,

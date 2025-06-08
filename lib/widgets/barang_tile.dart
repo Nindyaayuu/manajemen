@@ -24,7 +24,10 @@ class BarangTile extends StatelessWidget {
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [Text('Stok: ${barang.stok}'), Text(barang.deskripsi)],
+          children: [
+            Text('Stok: ${barang.stok}'),
+            Text(barang.deskripsi ?? ''),
+          ],
         ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
