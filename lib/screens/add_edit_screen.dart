@@ -15,6 +15,7 @@ class _AddEditScreenState extends State<AddEditScreen> {
   final _namaController = TextEditingController();
   final _stokController = TextEditingController();
   final _deskripsiController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -40,7 +41,6 @@ class _AddEditScreenState extends State<AddEditScreen> {
         } else {
           await SupabaseService.updateBarang(barang);
         }
-
         if (!mounted) return;
         Navigator.pop(context);
       } catch (e) {
@@ -54,7 +54,6 @@ class _AddEditScreenState extends State<AddEditScreen> {
   @override
   Widget build(BuildContext context) {
     final isEditing = widget.barang != null;
-
     return Scaffold(
       appBar: AppBar(title: Text(isEditing ? 'Edit Barang' : 'Tambah Barang')),
       body: Padding(

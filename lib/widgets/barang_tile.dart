@@ -26,7 +26,8 @@ class BarangTile extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Stok: ${barang.stok}'),
-            Text(barang.deskripsi ?? ''),
+            if (barang.deskripsi != null && barang.deskripsi!.isNotEmpty)
+              Text(barang.deskripsi!),
           ],
         ),
         trailing: Row(

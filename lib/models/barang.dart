@@ -8,7 +8,7 @@ class Barang {
     required this.id,
     required this.nama,
     required this.stok,
-    required this.deskripsi,
+    this.deskripsi,
   });
 
   factory Barang.fromJson(Map<String, dynamic> json) {
@@ -26,13 +26,4 @@ class Barang {
     'stok': stok,
     'deskripsi': deskripsi,
   };
-
-  Barang copyWith({int? id, String? nama, int? stok, String? deskripsi}) {
-    return Barang(
-      id: id ?? this.id,
-      nama: nama ?? this.nama,
-      stok: stok ?? this.stok,
-      deskripsi: deskripsi ?? this.deskripsi,
-    );
-  }
 }
