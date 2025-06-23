@@ -16,29 +16,39 @@ class BarangTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Colors.green.shade50,
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 10,
+        ),
         title: Text(
           barang.nama,
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Stok: ${barang.stok}'),
-            if (barang.deskripsi != null && barang.deskripsi!.isNotEmpty)
-              Text(barang.deskripsi!),
-          ],
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 4),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Stok: ${barang.stok}'),
+              if (barang.deskripsi != null && barang.deskripsi!.isNotEmpty)
+                Text(barang.deskripsi!),
+            ],
+          ),
         ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
+        trailing: Wrap(
+          spacing: 4,
           children: [
             IconButton(
-              icon: const Icon(Icons.edit, color: Colors.orange),
+              icon: const Icon(Icons.edit, color: Colors.teal),
+              tooltip: 'Edit',
               onPressed: onEdit,
             ),
             IconButton(
               icon: const Icon(Icons.delete, color: Colors.red),
+              tooltip: 'Hapus',
               onPressed: () {
                 showDialog(
                   context: context,
@@ -53,11 +63,15 @@ class BarangTile extends StatelessWidget {
                             onPressed: () => Navigator.pop(ctx),
                             child: const Text('Batal'),
                           ),
-                          TextButton(
+                          ElevatedButton(
                             onPressed: () {
                               Navigator.pop(ctx);
                               onDelete();
                             },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red,
+                              foregroundColor: Colors.white,
+                            ),
                             child: const Text('Hapus'),
                           ),
                         ],

@@ -30,9 +30,9 @@ class _AddEditScreenState extends State<AddEditScreen> {
     if (_formKey.currentState!.validate()) {
       final barang = Barang(
         id: widget.barang?.id ?? 0,
-        nama: _namaController.text,
-        stok: int.tryParse(_stokController.text) ?? 0,
-        deskripsi: _deskripsiController.text,
+        nama: _namaController.text.trim(),
+        stok: int.tryParse(_stokController.text.trim()) ?? 0,
+        deskripsi: _deskripsiController.text.trim(),
       );
 
       try {
@@ -54,38 +54,60 @@ class _AddEditScreenState extends State<AddEditScreen> {
   @override
   Widget build(BuildContext context) {
     final isEditing = widget.barang != null;
+
     return Scaffold(
       appBar: AppBar(title: Text(isEditing ? 'Edit Barang' : 'Tambah Barang')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
         child: Form(
           key: _formKey,
           child: Column(
             children: [
               TextFormField(
                 controller: _namaController,
-                decoration: const InputDecoration(labelText: 'Nama Barang'),
+                decoration: const InputDecoration(
+                  labelText: 'Nama Barang',
+                  border: OutlineInputBorder(),
+                ),
                 validator:
                     (value) =>
-                        value!.isEmpty ? 'Nama tidak boleh kosong' : null,
+                        value == null || value.isEmpty
+                            ? 'Nama tidak boleh kosong'
+                            : null,
               ),
+              const SizedBox(height: 12),
               TextFormField(
                 controller: _stokController,
-                decoration: const InputDecoration(labelText: 'Stok'),
+                decoration: const InputDecoration(
+                  labelText: 'Stok',
+                  border: OutlineInputBorder(),
+                ),
                 keyboardType: TextInputType.number,
                 validator:
                     (value) =>
-                        value!.isEmpty ? 'Stok tidak boleh kosong' : null,
+                        value == null || value.isEmpty
+                            ? 'Stok tidak boleh kosong'
+                            : null,
               ),
+              const SizedBox(height: 12),
               TextFormField(
                 controller: _deskripsiController,
-                decoration: const InputDecoration(labelText: 'Deskripsi'),
-                maxLines: 2,
+                decoration: const InputDecoration(
+                  labelText: 'Deskripsi',
+                  border: OutlineInputBorder(),
+                ),
+                maxLines: 3,
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
+              ElevatedButton.icon(
                 onPressed: _simpan,
-                child: Text(isEditing ? 'Simpan Perubahan' : 'Tambah Barang'),
+                icon: Icon(isEditing ? Icons.save : Icons.add),
+                label: Text(isEditing ? 'Simpan Perubahan' : 'Tambah Barang'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green.shade600,
+                  foregroundColor: Colors.white,
+                  minimumSize: const Size.fromHeight(48),
+                ),
               ),
             ],
           ),

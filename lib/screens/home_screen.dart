@@ -33,11 +33,13 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     } catch (e) {
       setState(() => _isLoading = false);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$e')));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Gagal memuat data: $e')));
     }
   }
 
-  void _deleteBarang(int id) async {
+  Future<void> _deleteBarang(int id) async {
     await SupabaseService.hapusBarang(id);
     _loadBarang();
   }
